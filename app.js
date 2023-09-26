@@ -1,19 +1,18 @@
 /* eslint-disable import/extensions */
 /* eslint-disable no-console */
-import express from 'express';
+import express, {json} from 'express';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import mongoose from 'mongoose';
-import bodyParser from 'body-parser';
 import router from './routes/index.js';
+import 'dotenv/config';
 
-const { PORT = 3000, SERVER_URL = 'mongodb://localhost:27017/mestodb' } = process.env;
+const { PORT, MONGO_URL } = process.env;
 
 const app = express();
 
-mongoose.connect(SERVER_URL);
+mongoose.connect(MONGO_URL);
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(json());
 
 app.use('/', router);
 
