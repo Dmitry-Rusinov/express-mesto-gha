@@ -16,4 +16,4 @@
 
 ## Ссылка для подключения к проекту
 
-[<img src="https://fishinghunting.ru/upload/medialibrary/4c7/8gsdkd1kjguy34n5y7mjq6wxi9xbtfsq.gif" width="50"/>](https://github.com/Dmitry-Rusinov/express-mesto-gha)
+[<img src="https://fishinghunting.ru/upload/medialibrary/4c7/8gsdkd1kjguy34n5y7mjq6wxi9xbtfsq.gif" width="120"/>](https://github.com/Dmitry-Rusinov/express-mesto-gha)
