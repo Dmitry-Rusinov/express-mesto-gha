@@ -1,6 +1,5 @@
 module.exports = {
   env: {
-    browser: true,
     es2021: true,
   },
   extends: 'airbnb',
@@ -22,8 +21,9 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
-    'no-underscore-dangle': 'off',
+    'no-underscore-dangle': ['error', { allow: ['_id']}],
     'object-curly-spacing': 'off',
-    'import/extensions': 'always',
+    'import/extensions': 'off',
+    'consistent-return': 'off',
   },
 };

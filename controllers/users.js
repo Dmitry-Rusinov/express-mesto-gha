@@ -2,7 +2,7 @@ import User from '../models/user.js';
 
 const getUsers = (req, res) => {
   User.find({})
-    .then((users) => res.status(200).send({ data: users }))
+    .then((users) => res.send({ data: users }))
     .catch((err) => res.status(500).send({ message: `Произошла ошибка на стороне сервера, ${err}` }));
 };
 
@@ -20,11 +20,9 @@ const createUser = (req, res) => {
 
 const getUserById = (req, res) => {
   User.findById(req.params.userId)
+    .orFail(new Error('NotFound'))
     .then((user) => {
-      if (!user) {
-        throw new Error('NotFound');
-      }
-      return res.status(200).send({ data: user });
+      res.status(200).send({ data: user });
     })
     .catch((err) => {
       if (err.message === 'NotFound') {
@@ -40,11 +38,9 @@ const getUserById = (req, res) => {
 const updateUserProfile = (req, res) => {
   const { name, about } = req.body;
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
+    .orFail(new Error('NotFound'))
     .then((user) => {
-      if (!user) {
-        throw new Error('NotFound');
-      }
-      return res.status(200).send({ data: user });
+      res.status(200).send({ data: user });
     })
     .catch((err) => {
       if (err.message === 'NotFound') {
@@ -60,11 +56,9 @@ const updateUserProfile = (req, res) => {
 const updateUserAvatar = (req, res) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
+    .orFail(new Error('NotFound'))
     .then((user) => {
-      if (!user) {
-        throw new Error('NotFound');
-      }
-      return res.status(200).send({ data: user });
+      res.status(200).send({ data: user });
     })
     .catch((err) => {
       if (err.message === 'NotFound') {

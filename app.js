@@ -1,15 +1,17 @@
 import express, {json} from 'express';
 import mongoose from 'mongoose';
+import helmet from 'helmet';
 import router from './routes/index.js';
 import 'dotenv/config';
 
-const { PORT, MONGO_URL = 'mongodb://localhost:27017/mestodb' } = process.env;
+const { PORT, MONGO_URL = 'mongodb://127.0.0.1:27017/mestodb' } = process.env;
 
 const app = express();
 
 mongoose.connect(MONGO_URL);
 
 app.use(json());
+app.use(helmet());
 
 app.use((req, res, next) => {
   req.user = {
@@ -20,10 +22,6 @@ app.use((req, res, next) => {
 });
 
 app.use('/', router);
-
-app.use('*', (req, res) => {
-  res.status(404).send({ message: `Страница не найдена` })
-});
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
