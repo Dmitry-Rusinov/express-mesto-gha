@@ -2,15 +2,18 @@
 # Проект Mesto фронтенд + бэкенд
 
 
-## Директории
+## Используемые технологии
 
-`/routes` — папка с файлами роутера  
-`/controllers` — папка с файлами контроллеров пользователя и карточки   
-`/models` — папка с файлами описания схем пользователя и карточки  
-  
-Остальные директории вспомогательные, создаются при необходимости разработчиком
+* Node.js
+* Express.js
+* Mongoose
+* MongoDB
 
 ## Запуск проекта
 
 `npm run start` — запускает сервер   
 `npm run dev` — запускает сервер с hot-reload
+
+## Ссылка для подключения к проекту
+
+[<img src="https://fishinghunting.ru/upload/medialibrary/4c7/8gsdkd1kjguy34n5y7mjq6wxi9xbtfsq.gif" width="50"/>](https://github.com/Dmitry-Rusinov/express-mesto-gha)
