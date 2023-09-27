@@ -24,5 +24,6 @@ module.exports = {
   rules: {
     'no-underscore-dangle': 'off',
     'object-curly-spacing': 'off',
+    'import/extensions': 'always',
   },
 };

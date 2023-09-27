@@ -1,7 +1,7 @@
-/* eslint-disable import/named */
-/* eslint-disable import/extensions */
 import { Router } from 'express';
-import { createCard, getCards, deleteCard, setLikeCard, dislikeCard } from '../controllers/cards.js';
+import {
+  createCard, getCards, deleteCard, setLikeCard, dislikeCard,
+} from '../controllers/cards.js';
 
 const cardRoutes = Router();
 

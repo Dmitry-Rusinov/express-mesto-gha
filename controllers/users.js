@@ -1,6 +1,4 @@
-/* eslint-disable object-curly-newline */
-/* eslint-disable import/extensions */
-import User from '../models/User.js';
+import User from '../models/user.js';
 
 const getUsers = (req, res) => {
   User.find({})
@@ -21,7 +19,7 @@ const createUser = (req, res) => {
 };
 
 const getUserById = (req, res) => {
-  User.findById(req.params.userId)
+  User.findById(req.params.userId, {new: true})
     .then((user) => {
       if (!user) {
         throw new Error('NotFound');
@@ -79,4 +77,6 @@ const updateUserAvatar = (req, res) => {
     });
 };
 
-export { getUsers, createUser, getUserById, updateUserAvatar, updateUserProfile };
+export {
+  getUsers, createUser, getUserById, updateUserAvatar, updateUserProfile,
+};

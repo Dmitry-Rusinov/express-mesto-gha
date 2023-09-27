@@ -1,5 +1,4 @@
-/* eslint-disable import/extensions */
-import Card from '../models/Card.js';
+import Card from '../models/card.js';
 
 const createCard = ((req, res) => {
   const { name, link } = req.body;
@@ -20,7 +19,7 @@ const getCards = ((req, res) => {
 });
 
 const deleteCard = ((req, res) => {
-  Card.findByIdAndRemove(req.params._id)
+  Card.findByIdAndRemove(req.params.cardId)
     .then((card) => res.status(200).send({ data: card }))
     .catch((err) => res.status(400).send({ message: `Карточка с указанным id не найдена, ${err}`}));
 });
@@ -71,4 +70,6 @@ const dislikeCard = ((req, res) => {
     });
 });
 
-export { createCard, getCards, deleteCard, setLikeCard, dislikeCard };
+export {
+  createCard, getCards, deleteCard, setLikeCard, dislikeCard,
+};

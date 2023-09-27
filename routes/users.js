@@ -1,7 +1,7 @@
-/* eslint-disable import/extensions */
-/* eslint-disable no-console */
 import { Router } from 'express';
-import { getUsers, createUser, getUserById, updateUserAvatar, updateUserProfile } from '../controllers/users.js';
+import {
+  getUsers, createUser, getUserById, updateUserAvatar, updateUserProfile,
+} from '../controllers/users.js';
 
 const userRoutes = Router();
 

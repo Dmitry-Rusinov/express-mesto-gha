@@ -9,7 +9,7 @@ const cardSchema = new mongoose.Schema({
   },
   link: {
     type: String,
-    required: true,
+    required: [true, 'Добавьте ссылку на изображение'],
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
@@ -20,6 +20,10 @@ const cardSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     default: [],
   }],
-}, { timestamps: true });
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
 export default mongoose.model('card', cardSchema);
