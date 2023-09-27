@@ -21,7 +21,7 @@ const getCards = ((req, res) => {
 const deleteCard = ((req, res) => {
   Card.findByIdAndRemove(req.params.cardId)
     .then((card) => res.status(200).send({ data: card }))
-    .catch((err) => res.status(400).send({ message: `Карточка с указанным id не найдена, ${err}`}));
+    .catch((err) => res.status(404).send({ message: `Карточка с указанным id не найдена, ${err}`}));
 });
 
 const setLikeCard = ((req, res) => {
@@ -40,7 +40,7 @@ const setLikeCard = ((req, res) => {
       if (err.message === 'NotFound') {
         return res.status(404).send({ message: `Передан несуществующий id карточки,, ${err}`});
       }
-      if (err.name === 'ValidationError') {
+      if (err.name === 'CastError') {
         return res.status(400).send({ message: `Переданы некорректные данные для постановки/снятии лайка, ${err}` });
       }
       return res.status(500).send({ message: `Произошла ошибка на стороне сервера, ${err}` });
@@ -57,13 +57,13 @@ const dislikeCard = ((req, res) => {
       if (!card) {
         throw new Error('NotFound');
       }
-      return res.status(201).send(card);
+      return res.status(200).send(card);
     })
     .catch((err) => {
       if (err.message === 'NotFound') {
         return res.status(404).send({ message: `Передан несуществующий id карточки,, ${err}`});
       }
-      if (err.name === 'ValidationError') {
+      if (err.name === 'CastError') {
         return res.status(400).send({ message: `Переданы некорректные данные для постановки/снятии лайка, ${err}` });
       }
       return res.status(500).send({ message: `Произошла ошибка на стороне сервера, ${err}` });

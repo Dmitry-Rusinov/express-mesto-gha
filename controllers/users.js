@@ -19,7 +19,7 @@ const createUser = (req, res) => {
 };
 
 const getUserById = (req, res) => {
-  User.findById(req.params.userId, {new: true})
+  User.findById(req.params.userId)
     .then((user) => {
       if (!user) {
         throw new Error('NotFound');
@@ -39,12 +39,12 @@ const getUserById = (req, res) => {
 
 const updateUserProfile = (req, res) => {
   const { name, about } = req.body;
-  User.findByIdAndUpdate(req.user._id, { name, about }, { new: true })
+  User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
         throw new Error('NotFound');
       }
-      return res.status(201).send({ data: user });
+      return res.status(200).send({ data: user });
     })
     .catch((err) => {
       if (err.message === 'NotFound') {
@@ -59,7 +59,7 @@ const updateUserProfile = (req, res) => {
 
 const updateUserAvatar = (req, res) => {
   const { avatar } = req.body;
-  User.findByIdAndUpdate(req.user._id, { avatar })
+  User.findByIdAndUpdate(req.user._id, { avatar }, { runValidators: true })
     .then((user) => {
       if (!user) {
         throw new Error('NotFound');
