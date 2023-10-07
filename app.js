@@ -1,6 +1,7 @@
 import express, {json} from 'express';
 import mongoose from 'mongoose';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 import router from './routes/index.js';
 import 'dotenv/config';
 
@@ -12,14 +13,7 @@ mongoose.connect(MONGO_URL);
 
 app.use(json());
 app.use(helmet());
-
-app.use((req, res, next) => {
-  req.user = {
-    _id: '6511f9a2c91cb2cd97925962',
-  };
-
-  next();
-});
+app.use(cookieParser());
 
 app.use('/', router);
 

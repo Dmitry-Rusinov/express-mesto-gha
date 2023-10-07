@@ -1,4 +1,35 @@
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
+
+const login = (req, res) => {
+  const {email, password} = req.body;
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
+      res.cookie('someCookieKey', token, { httpOnly: true, sameSite: true, maxAge: 3600000 * 24 * 7 }).end();
+      res.status(200).send({ email: user.email});
+    })
+    .catch((err) => {
+      res.status(401).send({ message: err.message });
+    });
+};
+
+const getInfoByCurrentUser = (req, res) => {
+  User.findById(req.user._id)
+    .then((user) => {
+      if (!user) {
+        throw new Error('NotFound');
+      }
+      return res.status(200).send(user);
+    })
+    .catch((err) => {
+      if (err.message === 'NotFound') {
+        res.status(400).send({ message: `Пользователь не найден, ${err}` });
+      }
+      res.status(500).send({ message: `Произошла ошибка на стороне сервера, ${err}` });
+    });
+};
 
 const getUsers = (req, res) => {
   User.find({})
@@ -7,10 +38,22 @@ const getUsers = (req, res) => {
 };
 
 const createUser = (req, res) => {
-  const { name, about, avatar } = req.body;
-  User.create({ name, about, avatar })
-    .then((user) => res.status(201).send({ data: user }))
+  const {
+    email, password,
+  } = req.body;
+  bcrypt.hash(password, 10)
+    .then((hash) => User.create({
+      email,
+      password: hash,
+    }))
+    .then((user) => res.status(201).send({
+      email: user.email,
+      _id: user._id,
+    }))
     .catch((err) => {
+      if (err.code === 11000) {
+        return res.status(409).send({ message: `Такой пользователь уже существует, ${err}` });
+      }
       if (err.name === 'ValidationError') {
         return res.status(400).send({ message: `Ошибка валидации полей, ${err}` });
       }
@@ -72,5 +115,6 @@ const updateUserAvatar = (req, res) => {
 };
 
 export {
-  getUsers, createUser, getUserById, updateUserAvatar, updateUserProfile,
+  getUsers, createUser, getUserById, updateUserAvatar,
+  updateUserProfile, login, getInfoByCurrentUser,
 };
