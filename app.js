@@ -1,9 +1,9 @@
 import express, {json} from 'express';
+import 'dotenv/config';
 import mongoose from 'mongoose';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import router from './routes/index.js';
-import 'dotenv/config';
 
 const { PORT = 3000, MONGO_URL = 'mongodb://127.0.0.1:27017/mestodb' } = process.env;
 

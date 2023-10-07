@@ -1,5 +1,7 @@
 import jwt from 'jsonwebtoken';
 
+const { NODE_ENV, JWT_SECRET } = process.env;
+
 const auth = (req, res, next) => {
   const authorization = req.cookies.someCookieKey;
   const token = authorization.replace('Bearer ', '');
@@ -10,7 +12,7 @@ const auth = (req, res, next) => {
   let payload;
 
   try {
-    payload = jwt.verify(token, 'some-secret-key');
+    payload = jwt.verify(token, NODE_ENV ? JWT_SECRET : 'some-secret-key');
   } catch (err) {
     if (err.message === 'NoAutanticate') {
       return res.status(401).send({ message: `Неправильные почта или пароль, ${err}` });

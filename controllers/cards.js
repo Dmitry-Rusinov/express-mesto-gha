@@ -22,6 +22,9 @@ const deleteCard = ((req, res) => {
   Card.findByIdAndRemove(req.params.cardId)
     .orFail(new Error('NotFound'))
     .then((card) => {
+      if (card.owner.toString() !== req.user._id) {
+        return res.status(403).send({ message: 'Нет прав для удаления чужой карточки'});
+      }
       res.status(200).send({ data: card });
     })
     .catch((err) => {

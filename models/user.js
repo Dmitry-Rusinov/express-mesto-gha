@@ -35,7 +35,6 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, 'Поле password является обязательным'],
-    minlength: 8,
     select: false,
   },
 }, { timestamps: true, versionKey: false });
