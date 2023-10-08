@@ -1,5 +1,7 @@
 export default function errorHandler(err, req, res, next) {
-  const statusCode = err.statusCode || 500;
-  const message = err.message || 'Ошибка на стороне сервера';
-  res.status(statusCode).send({ message });
+  const { statusCode = 500, message } = err;
+  res.status(statusCode).send({
+    message: statusCode === 500 ? 'Ошибка на стороне сервера' : message,
+  });
+  next();
 }

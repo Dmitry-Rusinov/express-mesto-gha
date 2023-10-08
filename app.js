@@ -3,6 +3,7 @@ import 'dotenv/config';
 import mongoose from 'mongoose';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
+import { errors } from 'celebrate';
 import router from './routes/index.js';
 import errorHandler from './middlewares/errorHandler.js';
 
@@ -18,6 +19,7 @@ app.use(cookieParser());
 
 app.use('/', router);
 
+app.use(errors);
 app.use(errorHandler);
 
 app.listen(PORT, () => {
