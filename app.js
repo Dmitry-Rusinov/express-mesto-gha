@@ -19,7 +19,7 @@ app.use(cookieParser());
 
 app.use('/', router);
 
-app.use(errors);
+app.use(errors());
 app.use(errorHandler);
 
 app.listen(PORT, () => {

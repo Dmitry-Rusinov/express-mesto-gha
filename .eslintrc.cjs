@@ -23,7 +23,7 @@ module.exports = {
   rules: {
     'no-underscore-dangle': ['error', { allow: ['_id']}],
     'object-curly-spacing': 'off',
-    'import/extensions': 'off',
+    'import/extensions': 'always',
     'consistent-return': 'off',
   },
 };
