@@ -24,7 +24,7 @@ userRoutes.patch('/users/me', celebrate({
 
 userRoutes.patch('/users/me/avatar', celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string(),
+    avatar: Joi.string().pattern(/(https?:\/\/)(w{3}?\.)?(((\d{1,3}\.){3}\d{1,3})|((\w-?)+\.(ru|com)))(:\d{2,5})?((\/.+)+)?\/?#?/)
   }),
 }), updateUserAvatar);
 
