@@ -6,7 +6,7 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 const auth = (req, res, next) => {
   const authorization = req.cookies.someCookieKey;
   if (!authorization) {
-    next(new Unauthorized('Требуется авторизация'));
+    return next(new Unauthorized('Требуется авторизация'));
   }
 
   const token = authorization.replace('Bearer ', '');
@@ -15,7 +15,7 @@ const auth = (req, res, next) => {
   try {
     payload = jwt.verify(token, NODE_ENV ? JWT_SECRET : 'some-secret-key');
   } catch (err) {
-    next(new Unauthorized('Требуется авторизация'));
+    return next(new Unauthorized('Требуется авторизация'));
   }
 
   req.user = payload;

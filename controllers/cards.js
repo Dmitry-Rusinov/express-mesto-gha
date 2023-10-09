@@ -1,5 +1,4 @@
 import Card from '../models/card.js';
-import BadRequest from '../errors/BadRequest.js';
 import Forbidden from '../errors/Forbidden.js';
 import NotFound from '../errors/NotFound.js';
 
@@ -7,12 +6,7 @@ const createCard = ((req, res, next) => {
   const { name, link } = req.body;
   Card.create({name, link, owner: req.user._id})
     .then((card) => res.status(201).send({ data: card }))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new BadRequest('Ошибка валидации полей'));
-      }
-      return next(err);
-    });
+    .catch(next);
 });
 
 const getCards = ((req, res, next) => {
@@ -22,7 +16,7 @@ const getCards = ((req, res, next) => {
 });
 
 const deleteCard = ((req, res, next) => {
-  Card.findByIdAndRemove(req.params.cardId)
+  Card.findById(req.params.cardId)
     .then((card) => {
       if (!card) {
         return next(new NotFound('Карточка с указанным id не найдена'));
@@ -30,14 +24,11 @@ const deleteCard = ((req, res, next) => {
       if (card.owner.valueOf() !== req.user._id) {
         return next(new Forbidden('Нет прав для удаления чужой карточки'));
       }
-      res.status(200).send({ data: card });
+      Card.findByIdAndRemove(req.params.cardId)
+        .then((item) => res.status(200).send(item))
+        .catch(next);
     })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        return next(new BadRequest('Передан несуществующий id карточки'));
-      }
-      return next(err);
-    });
+    .catch(next);
 });
 
 const setLikeCard = ((req, res, next) => {
@@ -52,12 +43,7 @@ const setLikeCard = ((req, res, next) => {
       }
       return res.status(201).send(card);
     })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        return next(new BadRequest('Переданы некорректные данные для постановки/снятии лайка'));
-      }
-      return next(err);
-    });
+    .catch(next);
 });
 
 const dislikeCard = ((req, res, next) => {
@@ -72,12 +58,7 @@ const dislikeCard = ((req, res, next) => {
       }
       return res.status(200).send(card);
     })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        return next(new BadRequest('Переданы некорректные данные для постановки/снятии лайка'));
-      }
-      return next(err);
-    });
+    .catch(next);
 });
 
 export {

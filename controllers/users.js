@@ -1,10 +1,8 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
-import BadRequest from '../errors/BadRequest.js';
 import NotFound from '../errors/NotFound.js';
 import Conflict from '../errors/Conflict.js';
-import Unauthorized from '../errors/Unauthorized.js';
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -12,9 +10,6 @@ const login = (req, res, next) => {
   const {email, password} = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      if (!email || !password) {
-        return next(new Unauthorized('Неправильные логин или пароль'));
-      }
       const token = jwt.sign({ _id: user._id }, NODE_ENV ? JWT_SECRET : 'some-secret-key', { expiresIn: '7d' });
       res.cookie('someCookieKey', token, { httpOnly: true, sameSite: true, maxAge: 3600000 * 24 * 7 });
       res.status(200).send({ email: user.email});
@@ -24,12 +19,7 @@ const login = (req, res, next) => {
 
 const getInfoByCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
-    .then((user) => {
-      if (!user) {
-        throw new NotFound('Пользователь не найден');
-      }
-      return res.status(200).send(user);
-    })
+    .then((user) => res.status(200).send(user))
     .catch(next);
 };
 
@@ -61,9 +51,6 @@ const createUser = (req, res, next) => {
       });
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new BadRequest('Ошибка валидации полей'));
-      }
       if (err.code === 11000) {
         return next(new Conflict('Такой пользователь уже существует'));
       }
@@ -79,12 +66,7 @@ const getUserById = (req, res, next) => {
       }
       return res.status(200).send(user);
     })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new BadRequest('Передан не валидный id'));
-      }
-      return next(err);
-    });
+    .catch(next);
 };
 
 const updateUserProfile = (req, res, next) => {
@@ -93,12 +75,7 @@ const updateUserProfile = (req, res, next) => {
     .then((user) => {
       res.status(200).send(user);
     })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new BadRequest('Ошибка валидации полей'));
-      }
-      return next(err);
-    });
+    .catch(next);
 };
 
 const updateUserAvatar = (req, res, next) => {
@@ -107,12 +84,7 @@ const updateUserAvatar = (req, res, next) => {
     .then((user) => {
       res.status(200).send(user);
     })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return next(new BadRequest('Ошибка валидации полей'));
-      }
-      return next(err);
-    });
+    .catch(next);
 };
 
 export {
