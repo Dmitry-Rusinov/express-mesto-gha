@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import { errors } from 'celebrate';
+import { requestLogger, errorLogger } from './middlewares/Logger.js';
 import router from './routes/index.js';
 import errorHandler from './middlewares/errorHandler.js';
 
@@ -17,7 +18,11 @@ app.use(json());
 app.use(helmet());
 app.use(cookieParser());
 
+app.use(requestLogger);
+
 app.use('/', router);
+
+app.use(errorLogger);
 
 app.use(errors());
 app.use(errorHandler);
